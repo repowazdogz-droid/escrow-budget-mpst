@@ -1,0 +1,28 @@
+[package]
+name = "escrow-budget-mpst"
+version = "0.1.0"
+edition = "2021"
+description = "Second, independent verification of the escrow-budget protocol via multiparty session types (crash-stop) in Rust."
+license = "MIT OR Apache-2.0"
+# Auto-discovery off: negative-control sources under negative/ must NOT be part of the
+# normal build (they are MEANT to fail to compile; scripts/negative-controls.sh drives them).
+autobins = false
+
+# Existing MPST-for-Rust implementation (Lagaillardie, Neykova & Yoshida, COORDINATION 2020).
+# We do NOT invent an MPST encoding. We reuse this crate's binary session types, multiparty
+# MeshedChannels + duality-checked projections, and its affine-timed (crash-stop) variant.
+# NOTE: mpstthree's generated macros reference these three crates by bare path, so they must
+# be DIRECT dependencies of any downstream crate: mpst-seq-proc, either, crossbeam-channel.
+[dependencies]
+mpstthree = { version = "0.1.17", default-features = false, features = ["baking_checking", "baking_atmp"] }
+mpst-seq-proc = "0.1.14"
+either = "1"
+crossbeam-channel = "0.5"
+
+[[bin]]
+name = "transfer_normal"
+path = "src/bin/transfer_normal.rs"
+
+[[bin]]
+name = "transfer_crash_stop"
+path = "src/bin/transfer_crash_stop.rs"

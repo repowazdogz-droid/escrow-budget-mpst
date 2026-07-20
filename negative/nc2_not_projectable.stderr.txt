@@ -1,0 +1,26 @@
+error[E0631]: type mismatch in function arguments
+  --> examples/nc2_not_projectable.rs:45:38
+   |
+38 | fn receiver(s: EndpointR) -> Result<(), Box<dyn Error>> {
+   | ------------------------------------------------------- found signature defined here
+...
+45 |     let (ts, tr) = fork_mpst(sender, receiver);
+   |                    ---------         ^^^^^^^^ expected due to this
+   |                    |
+   |                    required by a bound introduced by this call
+   |
+   = note: expected function signature `fn(MeshedChannels<Recv<u32, mpstthree::binary::struct_trait::end::End>, _, _>) -> _`
+              found function signature `fn(MeshedChannels<mpstthree::binary::struct_trait::send::Send<u32, mpstthree::binary::struct_trait::end::End>, RoleA<RoleEnd>, NameB>) -> _`
+note: required by a bound in `fork_mpst`
+  --> examples/nc2_not_projectable.rs:26:1
+   |
+26 | generate!("recursive", MeshedChannels, A, B);
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `fork_mpst`
+   = note: this error originates in the macro `mpst_seq_proc::baking_with_enum` which comes from the expansion of the macro `generate` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider wrapping the function in a closure
+   |
+45 |     let (ts, tr) = fork_mpst(sender, |arg0| receiver(/* MeshedChannels<mpstthree::binary::struct_trait::send::Send<u32, mpstthree::binary::struct_trait::end::End>, RoleA<RoleEnd>, NameB> */));
+   |                                      ++++++         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0631`.
+error: could not compile `escrow-budget-mpst` (example "nc2_not_projectable") due to 1 previous error

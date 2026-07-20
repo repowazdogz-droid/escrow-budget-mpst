@@ -1,0 +1,21 @@
+error[E0599]: no method named `recv` found for struct `MeshedChannels<Send<u32, Recv<TransferOutcome, End>>, RoleB<...>, ...>` in the current scope
+  --> examples/nc1_wrong_message.rs:34:25
+   |
+20 | generate!("recursive", MeshedChannels, A, B);
+   | -------------------------------------------- method `recv` not found for this struct
+...
+34 |     let (_wrong, s) = s.recv();
+   |                         ^^^^ method not found in `MeshedChannels<Send<u32, Recv<TransferOutcome, End>>, RoleB<...>, ...>`
+   |
+   = note: the method was found for
+           - `MeshedChannels<Recv<T, S1>, RoleA<R>, NameB>`
+           - `MeshedChannels<Recv<T, S1>, RoleB<R>, NameA>`
+   = note: the full name for the type has been written to '/Users/warre/capctl-iris-work/escrow-budget-mpst/target/debug/examples/nc1_wrong_message-9d41b0f06f972968.long-type-17971575179338060229.txt'
+   = note: consider using `--verbose` to print the full type name to the console
+help: one of the expressions' fields has a method of the same name
+   |
+34 |     let (_wrong, s) = s.name.receiver.recv();
+   |                         ++++++++++++++
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `escrow-budget-mpst` (example "nc1_wrong_message") due to 1 previous error

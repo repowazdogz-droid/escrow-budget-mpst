@@ -1,0 +1,34 @@
+== crash-stop fault injection across every protocol point ==
+
+---- normal, fresh transfer (crash = None) ----
+[R] credited 3 (fresh tid)
+[S] outcome = CREDIT
+   sender=Completed receiver=Completed => NO DEADLOCK, NO reception error
+
+---- normal, duplicate transfer (crash = None) ----
+[R] refused duplicate of 3
+[S] outcome = REFUSE
+   sender=Completed receiver=Completed => NO DEADLOCK, NO reception error
+
+---- crash: sender before send (crash = SenderBeforeSend) ----
+[S] *** CRASH before send *** (endpoint dropped)
+[R] SAFE ABORT: peer crash seen as disconnect on recv (catchable Err); no deadlock
+   sender=SelfCrashed receiver=AbortOnRecv => NO DEADLOCK, NO reception error
+
+---- crash: receiver before recv (crash = ReceiverBeforeRecv) ----
+[R] *** CRASH before recv *** (endpoint dropped)
+[S] SAFE ABORT: peer crash seen as disconnect on recv (catchable Err); no deadlock
+   sender=AbortOnRecv receiver=SelfCrashed => NO DEADLOCK, NO reception error
+
+---- crash: receiver before choice (crash = ReceiverBeforeChoice) ----
+[R] received 3, *** CRASH before choosing outcome *** (endpoint dropped)
+[S] SAFE ABORT: peer crash seen as disconnect on recv (catchable Err); no deadlock
+   sender=AbortOnRecv receiver=SelfCrashed => NO DEADLOCK, NO reception error
+
+---- crash: sender before offer (crash = SenderBeforeOffer) ----
+[S] *** CRASH after send, before awaiting outcome *** (endpoint dropped)
+[R] CRASH-STOP: peer crash seen while sending -> affine cancel + panic-unwind; no deadlock
+   sender=SelfCrashed receiver=StopOnSend => NO DEADLOCK, NO reception error
+
+Every crash point terminates BOTH endpoints without deadlock or reception error.
+This is crash-STOP (safe abort), NOT the escrow protocol's crash-RECOVERY. See GAPS.md.

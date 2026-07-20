@@ -1,0 +1,13 @@
+== normal operation: fresh transfer (should CREDIT) ==
+[S] write-ahead debit done (local escrow now 7); emitting Transfer
+[R] credited 3 (fresh tid). escrow now 3
+[S] transfer of 3 was CREDITED by R
+
+== normal operation: duplicate transfer (should REFUSE / dedup) ==
+[S] write-ahead debit done (local escrow now 7); emitting Transfer
+[R] refused duplicate of 3 (already credited)
+[S] transfer of 3 was REFUSED (duplicate) by R
+
+[local, NON-session] after two charges: spent=8 escrow=2; third charge accepted=false (this arithmetic is INVISIBLE to the session type)
+
+Deadlock-free & communication-safe BY CONSTRUCTION (both endpoints type-checked).
