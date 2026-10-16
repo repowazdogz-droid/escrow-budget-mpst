@@ -1,0 +1,25 @@
+name: ci
+
+# make check: build both bins, run the normal and crash-stop demonstrations, then
+# scripts/negative-controls.sh, which fails unless nc1/nc2 are rejected with their expected
+# rustc errors and the nc0 meta-control is classed as a wrong-reason rejection.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+      - run: make check
