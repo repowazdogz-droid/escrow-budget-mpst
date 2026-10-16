@@ -1,7 +1,7 @@
 # escrow-budget-mpst
 
 A **second, independent verification method** applied to the existing
-[`escrow-budget`](../escrow-budget/) artifact: the transfer sub-protocol expressed as a
+[`escrow-budget`](https://github.com/repowazdogz-droid/escrow-budget) artifact: the transfer sub-protocol expressed as a
 **multiparty session type (MPST) with crash-stop failures**, implemented in **Rust** so the type
 system enforces protocol conformance statically.
 
@@ -104,6 +104,6 @@ protocol and the **comparison** in COMPARISON.md / GAPS.md, not the methods them
 
 ## Cross-link
 
-Sibling artifact (first method, budget bound): [`../escrow-budget/`](../escrow-budget/). Read both
-to see the complementary picture; `../escrow-budget/README.md` proves what this one cannot, and
+Sibling artifact (first method, budget bound): [`../escrow-budget/`](https://github.com/repowazdogz-droid/escrow-budget). Read both
+to see the complementary picture; [`escrow-budget/README.md`](https://github.com/repowazdogz-droid/escrow-budget/blob/main/README.md) proves what this one cannot, and
 this one guarantees what that one left open.
