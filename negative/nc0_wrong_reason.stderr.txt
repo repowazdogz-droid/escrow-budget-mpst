@@ -1,0 +1,8 @@
+error[E0425]: cannot find value `undefined_binding_for_meta_control` in this scope
+ --> examples/nc0_wrong_reason.rs:8:13
+  |
+8 |     let _ = undefined_binding_for_meta_control;
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `escrow-budget-mpst` (example "nc0_wrong_reason") due to 1 previous error

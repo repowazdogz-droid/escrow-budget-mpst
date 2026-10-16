@@ -1,7 +1,7 @@
 # escrow-budget-mpst
 
 A **second, independent verification method** applied to the existing
-[`escrow-budget`](../escrow-budget/) artifact: the transfer sub-protocol expressed as a
+[`escrow-budget`](https://github.com/repowazdogz-droid/escrow-budget) artifact: the transfer sub-protocol expressed as a
 **multiparty session type (MPST) with crash-stop failures**, implemented in **Rust** so the type
 system enforces protocol conformance statically.
 
@@ -33,6 +33,7 @@ theorem" would be false, because this method never touches the cap theorem.
 | Crash-stop fault injection at every protocol point | `src/bin/transfer_crash_stop.rs` |
 | Negative control 1: type-violating impl rejected at compile time | `examples/nc1_wrong_message.rs` |
 | Negative control 2: non-projectable global type rejected at compile time | `examples/nc2_not_projectable.rs` |
+| Meta-control: an unrelated compile error is NOT counted as a rejection | `examples/nc0_wrong_reason.rs` |
 | Properties × methods table, complementary-not-redundant conclusion | [`COMPARISON.md`](COMPARISON.md) |
 | What this method does NOT give; failure-model reach; TCB additions | [`GAPS.md`](GAPS.md) |
 | Exact claims, assumptions, evidence grades | [`SCOPE.md`](SCOPE.md) |
@@ -54,8 +55,10 @@ make check            # build both bins, run both demonstrations, run the negati
 3. run `transfer_crash_stop` (a crash injected at each of the six protocol points; every one
    terminates both endpoints with no deadlock and no reception error);
 4. run `scripts/negative-controls.sh`, which compiles the two negative controls and asserts each
-   **fails to compile** (a compile success there would be a finding). The real compiler errors are
-   saved to `negative/*.stderr.txt`.
+   **fails to compile with its expected error** (a compile success, or a failure for some other
+   reason, is a finding). A meta-control, `nc0_wrong_reason`, fails for an unrelated reason and
+   must be classed as such, which shows the error check can tell reasons apart. The real compiler
+   errors are saved to `negative/*.stderr.txt`.
 
 Full rebuild from an empty target directory:
 
@@ -101,6 +104,6 @@ protocol and the **comparison** in COMPARISON.md / GAPS.md, not the methods them
 
 ## Cross-link
 
-Sibling artifact (first method, budget bound): [`../escrow-budget/`](../escrow-budget/). Read both
-to see the complementary picture; `../escrow-budget/README.md` proves what this one cannot, and
+Sibling artifact (first method, budget bound): [`../escrow-budget/`](https://github.com/repowazdogz-droid/escrow-budget). Read both
+to see the complementary picture; [`escrow-budget/README.md`](https://github.com/repowazdogz-droid/escrow-budget/blob/main/README.md) proves what this one cannot, and
 this one guarantees what that one left open.
